@@ -1,6 +1,12 @@
 ---
 - include_vars: secret.yml
 
+- name: add authorized_key
+  authorized_key:
+    user: pi
+    state: present
+    key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
 - name: mount /tmp as fstmp
   mount:
     path: /tmp
