@@ -1,0 +1,73 @@
+---
+- include_vars: secret.yml
+
+- name: create /root/bin
+  file:
+    path: /root/bin
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: copy ip-notify.sh
+  template:
+    src: ip-notify.sh.j2
+    dest: /root/bin/ip-notify.sh
+    owner: root
+    group: root
+    mode: 0755
+
+- name: copy ip-notify.service
+  copy:
+    src: ip-notify.service
+    dest: /etc/systemd/system/ip-notify.service
+    owner: root
+    group: root
+    mode: 0644
+
+- name: enable systemd-networkd.service
+  systemd:
+    name: systemd-networkd.service
+    enabled: yes
+
+- name: enable systemd-networkd-wait-online.service
+  systemd:
+    name: systemd-networkd-wait-online.service
+    enabled: yes
+
+- name: enable ip-notify.service
+  systemd:
+    name: ip-notify.service
+    enabled: yes
+
+- name: systemd daemon reload
+  systemd:
+    daemon_reload: yes
+
+- name: install temp node
+  apt:
+    name: nodejs
+    update_cache: yes
+
+- name: install temp npm
+  apt:
+    name: npm
+    update_cache: yes
+
+- name: install n
+  npm:
+    name: n
+    global: yes
+
+- name: install node by n
+  command: n stable
+
+- name: remove temp node
+  apt:
+    name: nodejs
+    state: absent
+
+- name: remove temp npm
+  apt:
+    name: npm
+    state: absent

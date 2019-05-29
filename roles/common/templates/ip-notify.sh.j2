@@ -1,0 +1,10 @@
+#!/bin/bash -e
+
+SLACK_WEBHOOK_URL="{{ secret.slack_webhook_url }}"
+
+# wait for DHCP
+sleep 10
+
+ip=$(ifconfig | grep "inet" | grep -o -E 192.168.[0-9]+.[0-9]+ | grep -v 255)
+
+curl -X POST $SLACK_WEBHOOK_URL -d "{ \"text\": \"$(hostname) が起動しました: \`${ip}\`\" }"

@@ -1,0 +1,12 @@
+[Unit]
+Description = notify IP to Slack
+After=systemd-networkd-wait-online.service
+Wants=systemd-networkd-wait-online.service
+
+[Service]
+ExecStart = /root/bin/ip-notify.sh
+Restart = no
+Type = simple
+
+[Install]
+WantedBy=multi-user.target
