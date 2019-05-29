@@ -1,6 +1,39 @@
 ---
 - include_vars: secret.yml
 
+- name: mount /tmp as fstmp
+  mount:
+    path: /tmp
+    src: tmpfs
+    fstype: tmpfs
+    opts: defaults,size=32m,noatime,mode=1777
+    state: present
+
+- name: mount /var/tmp as fstmp
+  mount:
+    path: /var/tmp
+    src: tmpfs
+    fstype: tmpfs
+    opts: defaults,size=32m,noatime,mode=1777
+    state: present
+
+- name: swapoff
+  command: swapoff --all
+
+- name: disable swap service
+  systemd:
+    name: dphys-swapfile
+    enabled: no
+
+- name: copy rsyslog.conf
+  copy:
+    src: rsyslog.conf
+    dest: /etc/rsyslog.conf
+    backup: yes
+    owner: root
+    group: root
+    mode: 0644
+
 - name: create /root/bin
   file:
     path: /root/bin
@@ -44,30 +77,30 @@
   systemd:
     daemon_reload: yes
 
-- name: install temp node
-  apt:
-    name: nodejs
-    update_cache: yes
+# - name: install temp node
+#   apt:
+#     name: nodejs
+#     update_cache: yes
 
-- name: install temp npm
-  apt:
-    name: npm
-    update_cache: yes
+# - name: install temp npm
+#   apt:
+#     name: npm
+#     update_cache: yes
 
-- name: install n
-  npm:
-    name: n
-    global: yes
+# - name: install n
+#   npm:
+#     name: n
+#     global: yes
 
-- name: install node by n
-  command: n stable
+# - name: install node by n
+#   command: n stable
 
-- name: remove temp node
-  apt:
-    name: nodejs
-    state: absent
+# - name: remove temp node
+#   apt:
+#     name: nodejs
+#     state: absent
 
-- name: remove temp npm
-  apt:
-    name: npm
-    state: absent
+# - name: remove temp npm
+#   apt:
+#     name: npm
+#     state: absent
