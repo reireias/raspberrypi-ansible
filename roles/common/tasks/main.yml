@@ -27,7 +27,7 @@
 - name: swapoff
   script: swapoff.sh
   register: result
-  changed_wehn: result.rc == 254
+  changed_when: result.rc == 254
   failed_when: result.rc not in [0, 254]
 
 - name: disable swap service
@@ -86,31 +86,3 @@
 - name: systemd daemon reload
   systemd:
     daemon_reload: yes
-
-# - name: install temp node
-#   apt:
-#     name: nodejs
-#     update_cache: yes
-
-# - name: install temp npm
-#   apt:
-#     name: npm
-#     update_cache: yes
-
-# - name: install n
-#   npm:
-#     name: n
-#     global: yes
-
-# - name: install node by n
-#   command: n stable
-
-# - name: remove temp node
-#   apt:
-#     name: nodejs
-#     state: absent
-
-# - name: remove temp npm
-#   apt:
-#     name: npm
-#     state: absent

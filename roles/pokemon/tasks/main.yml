@@ -1,0 +1,68 @@
+---
+- name: include secret vars
+  include_vars: secret.yml
+
+- name: stat n
+  stat:
+    path: /usr/local/bin/n
+  register: n
+
+- block:
+  - name: install temp node
+    apt:
+      name: nodejs
+      update_cache: yes
+  - name: install temp npm
+    apt:
+      name: npm
+      update_cache: yes
+  - name: install n
+    npm:
+      name: n
+      global: yes
+  - name: install node by n
+    command: n stable
+  - name: remove temp node
+    apt:
+      name: nodejs
+      state: absent
+  - name: remove temp npm
+    apt:
+      name: npm
+      state: absent
+  when: not n.stat.exists
+
+- name: download ngrok zip
+  get_url:
+    url: https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-arm.zip
+    dest: /tmp
+
+- name: mkdir /opt/ngrok
+  file:
+    path: /opt/ngrok
+    state: directory
+    mode: 0755
+
+- name: unarchive ngrok zip
+  unarchive:
+    src: /tmp/ngrok-stable-linux-arm.zip
+    dest: /opt/ngrok
+    remote_src: yes
+
+- name: set ngrok.yml
+  template:
+    src: ngrok.yml.j2
+    dest: /opt/ngrok/ngrok.yml
+    mode: 0644
+
+- name: copy ngrok.service
+  copy:
+    src: ngrok.service
+    dest: /etc/systemd/system/ngrok.service
+    mode: 0644
+
+- name: enable ngrok.service
+  systemd:
+    name: ngrok.service
+    enabled: yes
+    state: started
