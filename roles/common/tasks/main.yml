@@ -1,5 +1,6 @@
 ---
-- include_vars: secret.yml
+- name: include secret vars
+  include_vars: secret.yml
 
 - name: add authorized_key
   authorized_key:
@@ -24,7 +25,10 @@
     state: present
 
 - name: swapoff
-  command: swapoff --all
+  script: swapoff.sh
+  register: result
+  changed_wehn: result.rc == 254
+  failed_when: result.rc not in [0, 254]
 
 - name: disable swap service
   systemd:
