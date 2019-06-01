@@ -15,7 +15,6 @@
   - name: install temp npm
     apt:
       name: npm
-      update_cache: yes
   - name: install n
     npm:
       name: n
@@ -31,3 +30,51 @@
       name: npm
       state: absent
   when: not n.stat.exists
+
+- name: install yarn
+  npm:
+    name: yarn
+    global: yes
+
+- name: install packages
+  apt:
+    name:
+      - git
+      - libnss-mdns
+      - libavahi-compat-libdnssd-dev
+
+- name: clone google-home-pokemon-dictionary
+  git:
+    repo: https://github.com/reireias/google-home-pokemon-dictionary.git
+    dest: /opt/google-home-pokemon-dictionary
+  register: clone
+
+- block:
+  - name: yarn install
+    yarn:
+      path: /opt/google-home-pokemon-dictionary
+  # NOTE: https://qiita.com/hideo-works/items/06e54359bc651a928b2f
+  - name: replace mdns script
+    replace:
+      dest: /opt/google-home-pokemon-dictionary/node_modules/mdns/lib/browser.js
+      regexp: 'rst.getaddrinfo()'
+      replace: 'rst.getaddrinfo({families:[4]})'
+  when: clone.changed
+
+- name: set .env
+  template:
+    src: .env.j2
+    dest: /opt/google-home-pokemon-dictionary/.env
+    mode: 0644
+
+- name: copy systemd file
+  copy:
+    src: pokemon-dictionary.service
+    dest: /etc/systemd/system/pokemon-dictionary.service
+    mode: 0644
+
+- name: enable pokemon-dictionary.service
+  systemd:
+    name: pokemon-dictionary
+    enabled: yes
+    state: started

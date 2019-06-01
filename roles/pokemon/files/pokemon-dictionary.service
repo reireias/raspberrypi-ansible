@@ -1,0 +1,15 @@
+[Unit]
+Description=Pokemon Dictionary.
+After=syslog.target network.target
+ 
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/yarn start
+WorkingDirectory=/opt/google-home-pokemon-dictionary
+KillMode=process
+Restart=always
+User=root
+Group=root
+ 
+[Install]
+WantedBy=multi-user.target
