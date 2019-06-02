@@ -59,6 +59,16 @@
       dest: /opt/google-home-pokemon-dictionary/node_modules/mdns/lib/browser.js
       regexp: 'rst.getaddrinfo()'
       replace: 'rst.getaddrinfo({families:[4]})'
+  - name: delete file glob
+    find:
+      paths: /tmp/
+      patterns: yarn*
+    register: files_to_delete
+  - name: remove file glob
+    file:
+      path: "{{ item.path }}"
+      state: absent
+    with_items: "{{ files_to_delete.files }}"
   when: clone.changed
 
 - name: set .env
@@ -78,3 +88,9 @@
     name: pokemon-dictionary
     enabled: yes
     state: started
+
+- name: restart pokemon-dictionary.service
+  systemd:
+    name: pokemon-dictionary
+    state: restarted
+  when: clone.changed
