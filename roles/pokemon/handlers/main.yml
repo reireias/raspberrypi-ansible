@@ -1,0 +1,5 @@
+---
+- name: restart_pokemon_dictionary_service
+  systemd:
+    name: pokemon-dictionary
+    state: restarted

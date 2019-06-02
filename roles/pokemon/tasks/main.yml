@@ -53,6 +53,7 @@
   - name: yarn install
     yarn:
       path: /opt/google-home-pokemon-dictionary
+    notify: restart_pokemon_dictionary_service
   # NOTE: https://qiita.com/hideo-works/items/06e54359bc651a928b2f
   - name: replace mdns script
     replace:
@@ -88,9 +89,3 @@
     name: pokemon-dictionary
     enabled: yes
     state: started
-
-- name: restart pokemon-dictionary.service
-  systemd:
-    name: pokemon-dictionary
-    state: restarted
-  when: clone.changed
