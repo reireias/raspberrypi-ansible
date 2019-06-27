@@ -1,0 +1,44 @@
+---
+- name: include secret vars
+  include_vars: secret.yml
+
+- name: install packages
+  apt:
+    name:
+      - motion
+      - python-pip
+      - python-setuptools
+      - build-essential
+      - libssl-dev
+      - libffi-dev
+      - python-dev
+      - vim
+      - inotify-tools
+
+- name: install gsutil
+  pip:
+    name: gsutil
+
+- name: upgrade pyasn1
+  pip:
+    name: pyasn1-modules
+    state: latest
+
+- name: set gcp credentials
+  template:
+    src: credentials.json.j2
+    dest: /root/.credentials.json
+
+- name: copy upload script
+  copy:
+    src: upload.sh
+    dest: /root/bin/upload.sh
+    mode: 0755
+
+- name: copy motion.conf
+  copy:
+    src: motion.conf
+    dest: /etc/motion/motion.conf
+    mode: 0644
+    owner: root
+    group: root
