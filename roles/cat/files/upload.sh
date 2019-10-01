@@ -3,6 +3,7 @@
 TARGET_DIR="/tmp/motion"
 
 mkdir -p ${TARGET_DIR}
+chown -R motion:motion ${TARGET_DIR}
 rm "${TARGET_DIR}/*"
 while inotifywait -e CREATE ${TARGET_DIR}; do
     file=$(ls -rt ${TARGET_DIR} | tail -n 1)
