@@ -1,0 +1,10 @@
+[Unit]
+Description = upload daemon
+
+[Service]
+ExecStart = /root/bin/upload.sh
+Restart = always
+Type = simple
+
+[Install]
+WantedBy = multi-user.target

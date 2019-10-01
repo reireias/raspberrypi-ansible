@@ -35,6 +35,12 @@
     dest: /root/bin/upload.sh
     mode: 0755
 
+- name: copy upload.service
+  copy:
+    src: upload.service
+    dest: /etc/systemd/system
+    mode: 0644
+
 - name: copy motion.conf
   copy:
     src: motion.conf
@@ -42,3 +48,22 @@
     mode: 0644
     owner: root
     group: root
+
+- name: update motion daemon setting
+  replace:
+    path: /etc/default/motion
+    regexp: ^start_motion_daemon=no
+    replace: start_motion_daemon=yes
+
+- name: enable upload service
+  systemd:
+    name: upload
+    enabled: yes
+    state: started
+    daemon_reload: yes
+
+- name: enable motion service
+  systemd:
+    name: motion
+    enabled: yes
+    state: started
