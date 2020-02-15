@@ -1,0 +1,9 @@
+---
+- name: copy rsyslog.conf
+  copy:
+    src: rsyslog.conf
+    dest: /etc/rsyslog.conf
+    backup: yes
+    owner: root
+    group: root
+    mode: 0644

@@ -1,0 +1,16 @@
+---
+- name: mount /tmp as fstmp
+  mount:
+    path: /tmp
+    src: tmpfs
+    fstype: tmpfs
+    opts: defaults,size=64m,noatime,mode=1777
+    state: present
+
+- name: mount /var/tmp as fstmp
+  mount:
+    path: /var/tmp
+    src: tmpfs
+    fstype: tmpfs
+    opts: defaults,size=32m,noatime,mode=1777
+    state: present
