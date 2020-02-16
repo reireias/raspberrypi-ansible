@@ -3,3 +3,4 @@
   roles:
     - tmpfs
     - rsyslog
+    - node-exporter

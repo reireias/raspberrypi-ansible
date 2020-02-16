@@ -1,0 +1,38 @@
+---
+- name: check prometheus
+  stat:
+    path: /usr/bin/prometheus
+  register: prometheus
+
+- name: download prometheus
+  unarchive:
+    src: https://github.com/prometheus/prometheus/releases/download/v2.16.0/prometheus-2.16.0.linux-armv7.tar.gz
+    dest: /opt
+    remote_src: yes
+  when: not prometheus.stat.exists
+
+- name: create link
+  file:
+    src: /opt/prometheus-2.16.0.linux-armv7/prometheus
+    dest: /usr/bin/prometheus
+    state: link
+
+- name: copy systemd file
+  copy:
+    src: prometheus.service
+    dest: /etc/systemd/system/prometheus.service
+
+- name: copy prometheus.yml
+  template:
+    src: prometheus.yml
+    dest: /etc/prometheus/prometheus.yml
+    owner: root
+    group: root
+    mode: 0644
+
+- name: enabled and start prometheus
+  systemd:
+    name: prometheus
+    enabled: yes
+    state: started
+    daemon_reload: yes

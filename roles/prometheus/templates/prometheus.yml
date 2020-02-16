@@ -1,0 +1,37 @@
+global:
+  scrape_interval:     60s # By default, scrape targets every 15 seconds.
+  evaluation_interval: 60s # By default, scrape targets every 15 seconds.
+  external_labels:
+      monitor: 'pikube'
+
+rule_files:
+  # - "first.rules"
+  # - "second.rules"
+scrape_configs:
+  - job_name: 'prometheus'
+
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: node
+    static_configs:
+      - targets:
+        - 192.168.99.100:9100
+        labels:
+          node_name: pikube01
+      - targets:
+        - 192.168.99.101:9100
+        labels:
+          node_name: pikube02
+      - targets:
+        - 192.168.99.102:9100
+        labels:
+          node_name: pikube03
+  - job_name: kubernetes
+    static_configs:
+      - targets:
+        - 192.168.99.200:8080
+remote_write:
+  - url: 'https://{{ influxdb_domain }}/api/v1/prom/write?db=prometheus&u={{ influxdb_user }}&p={{ influxdb_pass }}'
+remote_read:
+  - url: 'https://{{ influxdb_domain }}/api/v1/prom/read?db=prometheus&u={{ influxdb_user }}&p={{ influxdb_pass }}'

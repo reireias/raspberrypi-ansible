@@ -1,0 +1,38 @@
+---
+# TODO: wait release 0.18.2
+# - name: download node_exporter
+#   unarchive:
+#     src: https://github.com/prometheus/node_exporter/releases/download/v0.18.1/node_exporter-0.18.1.linux-armv7.tar.gz
+#     dest: /opt
+#     remote_src: yes
+#   register: download
+
+# - name: create link
+#   file:
+#     src: /opt/node_exporter-0.18.1.linux-armv7/node_exporter
+#     dest: /usr/bin/node_exporter
+#     state: link
+#   when: download.changed
+
+- name: copy self build file
+  copy:
+    src: node_exporter
+    dest: /usr/bin/node_exporter
+    owner: root
+    group: root
+    mode: 0755
+
+- name: copy systemd file
+  copy:
+    src: node_exporter.service
+    dest: /etc/systemd/system/node_exporter.service
+    owner: root
+    group: root
+    mode: 0644
+
+- name: enabled and start node_exporter service
+  systemd:
+    name: node_exporter
+    enabled: yes
+    state: started
+    daemon_reload: yes
