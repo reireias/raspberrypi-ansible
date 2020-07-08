@@ -22,7 +22,7 @@
 - name: upgrade pyasn1
   pip:
     name: pyasn1-modules
-    state: latest
+    state: latest # noqa 403
 
 - name: set gcp credentials
   template:
