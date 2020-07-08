@@ -27,6 +27,10 @@ scrape_configs:
         - 192.168.99.102:9100
         labels:
           node_name: pikube03
+      - targets:
+        - 192.168.99.5:9100
+        labels:
+          node_name: prometheus
   - job_name: kubernetes
     static_configs:
       - targets:
