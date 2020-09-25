@@ -5,8 +5,11 @@ global:
       monitor: 'pikube'
 
 rule_files:
-  # - "first.rules"
-  # - "second.rules"
+  - alert.yml
+alerting:
+  alertmanagers:
+    - static_configs:
+      - targets: ['localhost:9093']
 scrape_configs:
   - job_name: 'prometheus'
 

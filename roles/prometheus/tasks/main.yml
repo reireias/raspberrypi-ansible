@@ -1,4 +1,5 @@
 ---
+# prometheus
 - name: check prometheus
   stat:
     path: /usr/bin/prometheus
@@ -30,9 +31,56 @@
     group: root
     mode: 0644
 
+- name: copy alert.yml
+  copy:
+    src: alert.yml
+    dest: /etc/prometheus/alert.yml
+    owner: root
+    group: root
+    mode: 0644
+
 - name: enabled and start prometheus
   systemd:
     name: prometheus
+    enabled: yes
+    state: started
+    daemon_reload: yes
+
+# alertmanager
+- name: check alertmanager
+  stat:
+    path: /usr/bin/alertmanager
+  register: alertmanager
+
+- name: download alertmanager
+  unarchive:
+    src: https://github.com/prometheus/alertmanager/releases/download/v0.21.0/alertmanager-0.21.0.linux-armv7.tar.gz
+    dest: /opt
+    remote_src: yes
+  when: not alertmanager.stat.exists
+
+- name: create link
+  file:
+    src: /opt/alertmanager-0.21.0.linux-armv7/alertmanager
+    dest: /usr/bin/alertmanager
+    state: link
+
+- name: copy systemd file
+  copy:
+    src: alertmanager.service
+    dest: /etc/systemd/system/alertmanager.service
+
+- name: copy alertmanager.yml
+  template:
+    src: alertmanager.yml
+    dest: /etc/prometheus/alertmanager.yml
+    owner: root
+    group: root
+    mode: 0644
+
+- name: enabled and start alertmanager
+  systemd:
+    name: alertmanager
     enabled: yes
     state: started
     daemon_reload: yes
