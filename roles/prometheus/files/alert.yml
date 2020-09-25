@@ -1,0 +1,11 @@
+groups:
+  - name: kubernetes
+    rules:
+      - alert: KubernetesDown
+        expr: 'up{job="kubernetes"} == 0'
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: 'Kubernetes endpoint is down.'
+          description: 'Kubernetes endpoint is down.'
