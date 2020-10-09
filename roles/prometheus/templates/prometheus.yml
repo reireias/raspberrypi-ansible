@@ -39,6 +39,4 @@ scrape_configs:
       - targets:
         - 192.168.99.200:8080
 remote_write:
-  - url: 'https://{{ influxdb_domain }}/api/v1/prom/write?db=prometheus&u={{ influxdb_user }}&p={{ influxdb_pass }}'
-remote_read:
-  - url: 'https://{{ influxdb_domain }}/api/v1/prom/read?db=prometheus&u={{ influxdb_user }}&p={{ influxdb_pass }}'
+  - url: 'https://metric-api.newrelic.com/prometheus/v1/write?X-License-Key={{ newrelic_license_key }}&prometheus_server=prometheus'
