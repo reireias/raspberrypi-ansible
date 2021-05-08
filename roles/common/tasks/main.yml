@@ -39,6 +39,7 @@
   register: result
   changed_when: result.rc == 254
   failed_when: result.rc not in [0, 254]
+  check_mode: no
 
 - name: disable swap service
   systemd:
