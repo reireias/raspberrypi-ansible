@@ -10,7 +10,7 @@ ExecStart=/usr/bin/node_exporter \
   --no-collector.buddyinfo \
   --no-collector.conntrack \
   --collector.cpu \
-  --no-collector.cpufreq \
+  --collector.cpufreq \
   --collector.diskstats \
   --no-collector.drbd \
   --no-collector.edac \
