@@ -48,7 +48,8 @@ ExecStart=/usr/bin/node_exporter \
   --no-collector.supervisord \
   --no-collector.systemd \
   --no-collector.tcpstat \
-  --no-collector.textfile \
+  --collector.textfile \
+  --collector.textfile.directory /opt/node_exporter/textfile \
   --collector.thermal_zone \
   --no-collector.time \
   --no-collector.timex \

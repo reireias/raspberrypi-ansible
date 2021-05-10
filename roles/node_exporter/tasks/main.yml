@@ -31,6 +31,17 @@
     group: root
     mode: 0644
 
+- name: create textfile directory
+  file:
+    path: /opt/node_exporter/textfile
+    owner: root
+    group: root
+    mode: 0755
+    state: directory
+
+- name: put os info file
+  shell: '. /etc/os-release && echo "node_os_release{pretty_name=\"$PRETTY_NAME\",name=\"$NAME\",version_id=\"$VERSION_ID\",id=\"$ID\",id_like=\"$ID_LIKE\"} 1" > /opt/node_exporter/textfile/node_os_release.prom'
+
 - name: enabled and start node_exporter service
   systemd:
     name: node_exporter
