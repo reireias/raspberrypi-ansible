@@ -52,7 +52,7 @@ ExecStart=/usr/bin/node_exporter \
   --collector.thermal_zone \
   --no-collector.time \
   --no-collector.timex \
-  --no-collector.uname \
+  --collector.uname \
   --no-collector.vmstat \
   --no-collector.wifi \
   --no-collector.xfs \
