@@ -29,7 +29,7 @@ ExecStart=/usr/bin/node_exporter \
   --no-collector.meminfo_numa \
   --no-collector.mountstats \
   --no-collector.netclass \
-  --no-collector.netdev \
+  --collector.netdev \
   --no-collector.netstat \
   --no-collector.nfs \
   --no-collector.nfsd \
