@@ -1,0 +1,5 @@
+---
+- hosts: raspberrypi
+  roles:
+    - rsyslog
+    - node_exporter

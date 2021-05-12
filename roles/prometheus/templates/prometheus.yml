@@ -31,6 +31,10 @@ scrape_configs:
         labels:
           node_name: pikube03
       - targets:
+        - 192.168.99.103:9100
+        labels:
+          node_name: pikube04
+      - targets:
         - 192.168.99.5:9100
         labels:
           node_name: prometheus
