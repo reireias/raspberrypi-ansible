@@ -1,0 +1,28 @@
+---
+- name: install nfs-server
+  apt:
+    name: nfs-kernel-server
+    update_cache: yes
+
+- name: create nfs directory
+  file:
+    path: /opt/nfs
+    owner: root
+    group: root
+    mode: 0755
+    state: directory
+
+- name: copy exports
+  copy:
+    src: exports
+    dest: /etc/exports
+    owner: root
+    group: root
+    mode: 0644
+
+- name: enable nfs-server
+  systemd:
+    name: nfs-server
+    enabled: yes
+    state: started
+    daemon_reload: yes
