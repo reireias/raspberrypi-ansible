@@ -39,12 +39,18 @@
     mode: 0755
     state: directory
 
+- name: check os info file
+  stat:
+    path: /opt/node_exporter/textfile/node_os_release.prom
+  register: osinfo
+
 - name: put os info file
   shell: '. /etc/os-release && echo "node_os_release{pretty_name=\"$PRETTY_NAME\",name=\"$NAME\",version_id=\"$VERSION_ID\",id=\"$ID\",id_like=\"$ID_LIKE\"} 1" > /opt/node_exporter/textfile/node_os_release.prom'
+  when: not osinfo.stat.exists
 
 - name: enabled and start node_exporter service
   systemd:
     name: node_exporter
     enabled: yes
-    state: restarted
+    state: started
     daemon_reload: yes
