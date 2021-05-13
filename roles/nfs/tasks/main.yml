@@ -12,6 +12,15 @@
     mode: 0755
     state: directory
 
+- name: create nfs sub directory
+  file:
+    path: "/opt/nfs/{{ item }}"
+    owner: nobody
+    group: nogroup
+    mode: 0755
+    state: directory
+  with_sequence: start=1 end=10 format=pv%02d
+
 - name: copy exports
   copy:
     src: exports
