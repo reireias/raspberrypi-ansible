@@ -31,8 +31,8 @@ ExecStart=/usr/bin/node_exporter \
   --no-collector.netclass \
   --collector.netdev \
   --no-collector.netstat \
-  --no-collector.nfs \
-  --no-collector.nfsd \
+  --collector.nfs \
+  --collector.nfsd \
   --no-collector.ntp \
   --no-collector.perf \
   --no-collector.powersupplyclass \
