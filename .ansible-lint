@@ -1,4 +1,3 @@
 skip_list:
   - ANSIBLE0004
-  - 204
-  - 503
+  - no-handler
